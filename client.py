@@ -1,4 +1,3 @@
-from email import message
 import socket
 import threading
 
@@ -17,7 +16,7 @@ def sending():
     while running:
 
         try:
-            message_input = input("> ").encode(FORMAT)
+            message_input = input("").encode(FORMAT)
         except EOFError:
             print("Error: leaving")
             running = False
@@ -29,8 +28,6 @@ def sending():
             print("Error: SERVER OFF, message not sent...")
             running = False
             break
-
-        
 
     socket.close()
 
@@ -55,7 +52,7 @@ def recving():
             print("Error: SERVER OFF, is shutdowned")
             break
 
-        print('\n',s_data)
+        print(s_data)
 
     socket.close()
 
