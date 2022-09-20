@@ -15,7 +15,7 @@ server_on = True
 stop_thread = False
 clients = []
 
-def handling(s_client, h_client):
+def handling(user_name, s_client, h_client):
     running = True
     while running:
 
@@ -30,15 +30,17 @@ def handling(s_client, h_client):
 
         print(c_data)
         for i in clients:
-            if i[0] == s_client:
+            if i[1] == s_client:
                 if i[-1] == True:
-                    s_client.send("quit".encode(FORMAT))
                     running = False
+            else:
+                i[1].send(f"{user_name}: {c_data}".encode(FORMAT))
 
     s_client.close()
     for i in clients:
-        if i[0] == s_client:
-            i[0].close()
+        if i[1] == s_client:
+            i[1].close()
+            clients.remove(i)
 
 def admin():
     global clients
@@ -47,7 +49,7 @@ def admin():
         print("""
             0: shutdown the server
             1: Number of clients connected
-            2: remove a client
+            2 <username>: remove a client
         """)
         user_input = input("> ")
 
@@ -58,6 +60,12 @@ def admin():
 
         elif user_input == '1':
             print(f"{len(clients)} of clients in server")
+        
+        elif user_input == f"2 {user_input[2:]}":
+            for i in clients:
+                if i[0] == user_input[2:]:
+                    i[1].send("BAN!".encode(FORMAT))
+                    i[1].close()
 
     socket.close()
 
@@ -71,12 +79,12 @@ while server_on:
         s_client, h_client = socket.accept()
     except OSError:
         for i in clients:
-            i[0].close()
+            i[1].close()
         print("Server shutdowning")
         server_on = False
         break
-
-    clients.append([s_client, h_client, stop_thread])
-    threading.Thread(target=handling, args=(s_client, h_client)).start()
+    user_name = s_client.recv(24).decode(FORMAT)
+    clients.append([user_name, s_client, h_client, stop_thread])
+    threading.Thread(target=handling, args=(user_name, s_client, h_client)).start()
 
 print("Server is OFF.")

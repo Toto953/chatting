@@ -5,8 +5,12 @@ import threading
 HOST, PORT = "localhost", 8989
 FORMAT = "UTF-8"
 
+user_name = input("> Your name: ")
+
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.connect((HOST, PORT))
+socket.send(user_name.encode(FORMAT))
+
 
 def sending():
     running = True
@@ -25,6 +29,8 @@ def sending():
             print("Error: SERVER OFF, message not sent...")
             running = False
             break
+
+        
 
     socket.close()
 
