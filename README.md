@@ -23,7 +23,7 @@ Voici les différentes commandes que vous pouvez executé sur le serveur:
 
 Les commandes servent à:
 
-   - Eteindre le serveur (commande n°1)
-   - Nombre d'utilisateurs connectés au serveur (commande n°2)
-   - Deconnecter un utilisateur via son pseudo (commande n°3)
-   - Liste de tout les utilisateurs connectés au serveur (commande n°4)
+   - Eteindre le serveur (commande n°1).
+   - Nombre d'utilisateurs connectés au serveur (commande n°2).
+   - Déconnecter un utilisateur via son pseudo (commande n°3).
+   - Liste de tout les utilisateurs connectés au serveur (commande n°4).

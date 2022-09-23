@@ -1,5 +1,8 @@
 import socket
 import threading
+import signal
+
+signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 HOST, PORT = "localhost", 8989
 FORMAT = "UTF-8"
@@ -8,8 +11,11 @@ user_name = input("> Your name: ")
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.connect((HOST, PORT))
-socket.send(user_name.encode(FORMAT))
 
+try:
+    socket.send(user_name.encode(FORMAT))
+except ConnectionRefusedError:
+    print("Error: Server OFF...")
 
 def sending():
     running = True

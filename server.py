@@ -45,7 +45,10 @@ def handling(user_name, s_client, h_client):
 
     for i in clients:
         if i[1] != s_client:
-            i[1].send(f"Server: {user_name} has left...".encode(FORMAT))
+            try:
+                i[1].send(f"Server: {user_name} has left...".encode(FORMAT))
+            except OSError:
+                pass
 
     s_client.close()
     for i in clients:
@@ -58,7 +61,11 @@ def admin():
     global clients
     running = True
     while running:
-        user_input = input("")
+        try:
+            user_input = input("")
+        except EOFError:
+            running = False
+            break
 
         os.system("cls")
         print("""
@@ -100,7 +107,7 @@ print("""
     0: shutdown the server
     1: Number of clients connected
     2 <username>: remove a client
-    3: Instructions
+    3: List of usernames client
 """)
 
 while server_on:
@@ -108,6 +115,12 @@ while server_on:
     try:
         s_client, h_client = socket.accept()
     except OSError:
+        for i in clients:
+            i[1].close()
+        print("> Server shutdowning <")
+        server_on = False
+        break
+    except KeyboardInterrupt:
         for i in clients:
             i[1].close()
         print("> Server shutdowning <")
